@@ -1,0 +1,12 @@
+# Arquivos de trabalho que NÃO devem ir para o site publicado na Vercel
+# (continuam no Git, só não ficam acessíveis pelo navegador)
+
+# Mockups e referências
+WhatsApp Image*
+
+# Backups e planilhas
+backup-*.csv
+*.xlsx
+
+# Guia interno dos sócios
+COMO-ADICIONAR-EVENTOS.md
