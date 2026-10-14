@@ -1,0 +1,15 @@
+# Arquivos que NUNCA devem ir para o GitHub
+.env
+.env.*
+*.key
+*.pem
+
+# Lixo do sistema e do editor
+.DS_Store
+Thumbs.db
+.vscode/
+node_modules/
+
+# Arquivos de trabalho
+*.zip
+GoOut-eventos.xlsx

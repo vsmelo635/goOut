@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>GoOut — eventos em Portugal</title>
+  <meta name="description" content="Descobre o que está a acontecer perto de ti: concertos, festas, cultura, gastronomia e desporto em Portugal, tudo num mapa.">
+  <meta name="theme-color" content="#0b0b0d">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
+  <!-- Fontes (Google Fonts, grátis) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Leaflet (biblioteca do mapa) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
+
+  <!-- Nosso estilo -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-vista="inicio">
+
+  <!-- ===== TOPO ===== -->
+  <header class="topo">
+    <a href="#inicio" class="logo" aria-label="GoOut — página inicial">
+      <!-- Se img/logo.png não existir, aparece o logótipo em texto logo abaixo -->
+      <!-- logo.png = texto claro (tema escuro) · logo-claro.png = texto escuro (tema claro) -->
+      <picture>
+        <source srcset="img/logo.png" media="(prefers-color-scheme: dark)">
+        <img src="img/logo-claro.png" alt="GoOut" class="logo-img">
+      </picture>
+      <span class="logo-texto" aria-hidden="true">
+        <svg viewBox="0 0 24 24" class="logo-simbolo"><path d="M7 8a4 4 0 1 0 0 8c3 0 7-8 10-8a4 4 0 1 1 0 8c-3 0-7-8-10-8z"/></svg>
+        GOOUT
+      </span>
+    </a>
+    <a href="#novidades" class="botao-icone" aria-label="Receber novidades por e-mail">
+      <svg viewBox="0 0 24 24" class="icone"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+      <span class="ponto-notificacao"></span>
+    </a>
+  </header>
+
+  <main>
+    <!-- ===== VISTA: INÍCIO ===== -->
+    <section id="vista-inicio" class="vista ativa" aria-label="Início">
+
+      <!-- Carrossel do topo -->
+      <div class="hero">
+        <div class="hero-trilho" id="hero-trilho"></div>
+        <div class="hero-pontos" id="hero-pontos"></div>
+      </div>
+
+      <div class="secao-titulo"><h2>Categorias</h2></div>
+      <div class="categorias" id="categorias-inicio"></div>
+
+      <div class="secao-titulo"><h2>Quando?</h2></div>
+      <div class="chips" id="datas-inicio"></div>
+
+      <div class="secao-titulo">
+        <h2>Próximos eventos <span class="contador" id="contador"></span></h2>
+        <a href="#mapa" class="ver-todas">Ver no mapa
+          <svg viewBox="0 0 24 24" class="icone icone-sm"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="grelha-eventos" id="lista-eventos">
+        <p class="carregando">A carregar eventos…</p>
+      </div>
+
+      <!-- Chamada para a newsletter -->
+      <div class="cta">
+        <h3>Os melhores eventos da semana no teu e-mail</h3>
+        <p>Uma seleção curta, todas as quintas-feiras. Sem spam.</p>
+        <a href="#novidades" class="botao">Quero receber</a>
+      </div>
+
+      <footer class="rodape">
+        <p>© <span id="ano"></span> GoOut · Feito em Portugal</p>
+        <p><a href="#divulgar">Organizas eventos? Divulga aqui</a></p>
+      </footer>
+    </section>
+
+    <!-- ===== VISTA: MAPA ===== -->
+    <section id="vista-mapa" class="vista" aria-label="Mapa de eventos">
+      <div class="mapa-filtros">
+        <div class="chips" id="categorias-mapa"></div>
+        <div class="chips" id="datas-mapa"></div>
+      </div>
+      <div id="mapa-leaflet"></div>
+    </section>
+
+    <!-- ===== VISTA: NOVIDADES (lead de utilizador) ===== -->
+    <section id="vista-novidades" class="vista" aria-label="Receber novidades">
+      <div class="painel-form">
+        <span class="sobretitulo">Newsletter</span>
+        <h1>Recebe os melhores eventos da semana</h1>
+        <p class="texto-2">Escolhemos o que vale a pena na tua cidade e enviamos-te por e-mail. Podes cancelar quando quiseres.</p>
+
+        <form data-lead novalidate data-sucesso="Obrigado! Já estás na lista. 🎉">
+          <input type="hidden" name="tipo" value="utilizador">
+          <input type="text" name="_gotcha" class="armadilha" tabindex="-1" autocomplete="off">
+
+          <label><span>Nome <span class="opcional">(opcional)</span></span>
+            <input type="text" name="nome" autocomplete="given-name" placeholder="O teu nome">
+          </label>
+          <label>E-mail
+            <input type="email" name="email" required autocomplete="email" placeholder="nome@exemplo.pt">
+          </label>
+          <label>Cidade
+            <select name="cidade" required>
+              <option value="">Escolhe a tua cidade</option>
+              <option>Lisboa</option>
+              <option>Porto</option>
+              <option>Aveiro</option>
+              <option>Outra</option>
+            </select>
+          </label>
+          <button type="submit" class="botao botao-largo">Inscrever-me</button>
+          <p class="form-msg" role="status"></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- ===== VISTA: DIVULGAR (lead de organizador) ===== -->
+    <section id="vista-divulgar" class="vista" aria-label="Divulgar um evento">
+      <div class="painel-form">
+        <span class="sobretitulo">Para organizadores</span>
+        <h1>Queres divulgar o teu evento?</h1>
+        <p class="texto-2">Bares, salas de concertos, associações e promotores: deixa os teus dados e entramos em contacto. Nesta fase é grátis.</p>
+
+        <form data-lead novalidate data-sucesso="Recebemos o teu pedido! Vamos falar contigo em breve.">
+          <input type="hidden" name="tipo" value="organizador">
+          <input type="text" name="_gotcha" class="armadilha" tabindex="-1" autocomplete="off">
+
+          <label>Nome
+            <input type="text" name="nome" required autocomplete="name" placeholder="O teu nome">
+          </label>
+          <label>E-mail
+            <input type="email" name="email" required autocomplete="email" placeholder="nome@exemplo.pt">
+          </label>
+          <label>Nome do espaço ou evento
+            <input type="text" name="local_nome" required placeholder="Ex.: Bar do Cais">
+          </label>
+          <label>Cidade
+            <select name="cidade" required>
+              <option value="">Escolhe a cidade</option>
+              <option>Lisboa</option>
+              <option>Porto</option>
+              <option>Aveiro</option>
+              <option>Outra</option>
+            </select>
+          </label>
+          <label>Link (Instagram, site ou bilheteira)
+            <input type="url" name="link" placeholder="https://instagram.com/...">
+          </label>
+          <button type="submit" class="botao botao-largo">Enviar pedido</button>
+          <p class="form-msg" role="status"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== MENU DE BAIXO ===== -->
+  <nav class="nav-baixo" aria-label="Navegação principal">
+    <a href="#inicio" data-vista="inicio">
+      <svg viewBox="0 0 24 24" class="icone"><path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z"/></svg>
+      <span>Início</span>
+    </a>
+    <a href="#mapa" data-vista="mapa">
+      <svg viewBox="0 0 24 24" class="icone"><path d="M9 3 3 6v15l6-3 6 3 6-3V3l-6 3z"/><path d="M9 3v15M15 6v15"/></svg>
+      <span>Mapa</span>
+    </a>
+    <a href="#novidades" data-vista="novidades">
+      <svg viewBox="0 0 24 24" class="icone"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+      <span>Novidades</span>
+    </a>
+    <a href="#divulgar" data-vista="divulgar">
+      <svg viewBox="0 0 24 24" class="icone"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+      <span>Divulgar</span>
+    </a>
+  </nav>
+
+  <!-- ===== DETALHE DO EVENTO (painel que sobe de baixo) ===== -->
+  <div class="folha" id="folha" hidden>
+    <div class="folha-fundo" data-fechar></div>
+    <article class="folha-painel" role="dialog" aria-modal="true" aria-labelledby="folha-titulo">
+      <button type="button" class="folha-fechar" data-fechar aria-label="Fechar">
+        <svg viewBox="0 0 24 24" class="icone"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <div id="folha-conteudo"></div>
+    </article>
+  </div>
+
+  <!-- integrity = "impressão digital" do arquivo: se alguém alterar o Leaflet no servidor, o navegador recusa -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
+  <script src="js/app.js"></script>
+  <!-- Vercel Web Analytics: conta as visitas (sem cookies) -->
+  <script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
