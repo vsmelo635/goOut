@@ -13,3 +13,9 @@ node_modules/
 # Arquivos de trabalho
 *.zip
 GoOut-eventos.xlsx
+
+# Arquivos de trabalho (ficam só no computador, não vão para o GitHub público)
+WhatsApp Image*
+backup-*.csv
+*.xlsx
+COMO-ADICIONAR-EVENTOS.md
